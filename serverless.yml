@@ -1,0 +1,51 @@
+service: payan-marvel-service
+
+provider:
+  name: aws
+  runtime: nodejs6.10
+  role: arn:aws:iam::292274580527:role/cc116_lambda
+  apiKeys:
+    - payan-marvel-api-key
+
+functions:
+  get-characters-chunk:
+    handler: getCharactersChunk.get
+    timeout: 10
+  get-characters:
+    handler: getCharacters.get
+    timeout: 10
+    events:
+      - http:
+          path: /characters
+          method: GET
+          cors: true
+          integration: lambda
+          private: true
+  get-character-comics-individual:
+    handler: getCharacterComicsChunk.get
+    timeout: 10
+  get-character-comics:
+    handler: getCharacterComics.get
+    memorySize: 128
+    timeout: 300
+    events:
+      - http:
+          path: /characters/{id}/comics
+          method: GET
+          cors: true
+          integration: lambda
+          private: true
+  get-character-series-individual:
+    handler: getCharacterSeriesChunk.get
+    timeout: 10
+  get-character-series:
+    handler: getCharacterSeries.get
+    memorySize: 128
+    timeout: 300
+    events:
+      - http:
+          path: /characters/{id}/series
+          method: GET
+          cors: true
+          integration: lambda
+          private: true
